@@ -1,5 +1,4 @@
 import os
-import tempfile
 import streamlit as st
 
 # 预定义登录账户和密码
@@ -29,7 +28,6 @@ login_accounts = {
     "student23": "Q2dL7b4n"
 }
 
-
 # 用于记录用户登录状态
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
@@ -50,76 +48,63 @@ def login_form():
             st.success("登录成功！")
         else:
             st.error("❌ 用户名或密码错误，请重试。")
-            
-
-# XOR 解密函数
-def xor_decode(data, key):
-    return bytearray([b ^ key for b in data])
-
-# 解密音频文件
-def decode_audio(input_path, key=123):
-    with open(input_path, 'rb') as f:
-        encoded_data = f.read()
-    return xor_decode(encoded_data, key)
 
 # 章节和文件路径定义
 chapters = {
     "考前指导": {
-        "考前指导": "encoded/0.dat",
-        "前导课": "encoded/1_0.dat"
+        "考前指导": "encoded/0.mp3",
+        "前导课": "encoded/1_0.mp3"
     },
     "第1章 飲食料品製造業での管理": {
-        "１．安全・安心な食 品を作る全体像": "encoded/1_1.dat",
-        "２．安全な職場環境": "encoded/1_2.dat",
-        "３．作業 者と管理者の違い": "encoded/1_3.dat",
-        "４．管理の結果としての記録": "encoded/1_4.dat"
+        "１．安全・安心な食 品を作る全体像": "encoded/1_1.mp3",
+        "２．安全な職場環境": "encoded/1_2.mp3",
+        "３．作業 者と管理者の違い": "encoded/1_3.mp3",
+        "４．管理の結果としての記録": "encoded/1_4.mp3"
     },
     "第2章 安全·安心な食品製造": {
-        "1.一般衛生管理": "encoded/2_1.dat",
-        "2.HACCP": "encoded/2_2.dat",
-        "3.生物的危害の管理": "encoded/2_3.dat",
-        "4.化学的危害の管理": "encoded/2_4.dat",
-        "5.物理的危害の管理": "encoded/2_5.dat",
-        "6.その他の管理": "encoded/2_6.dat"
+        "1.一般衛生管理": "encoded/2_1.mp3",
+        "2.HACCP": "encoded/2_2.mp3",
+        "3.生物的危害の管理": "encoded/2_3.mp3",
+        "4.化学的危害の管理": "encoded/2_4.mp3",
+        "5.物理的危害の管理": "encoded/2_5.mp3",
+        "6.その他の管理": "encoded/2_6.mp3"
     },
     "第3章 安全・安心の管理": {
-        "１．労働安全衛生法": "encoded/3_1.dat",
-        "２．正しい服装と手順": "encoded/3_2.dat",
-        "３．労働災害": "encoded/3_3.dat",
-        "４．労働災害の防止策": "encoded/3_4.dat",
-        "５．安全意識": "encoded/3_5.dat"
+        "１．労働安全衛生法": "encoded/3_1.mp3",
+        "２．正しい服装と手順": "encoded/3_2.mp3",
+        "３．労働災害": "encoded/3_3.mp3",
+        "４．労働災害の防止策": "encoded/3_4.mp3",
+        "５．安全意識": "encoded/3_5.mp3"
     },
     "第4章 品質管理": {
-        "1.作業前の管理点": "encoded/4_1.dat",
-        "2.作業中の管理点": "encoded/4_2.dat",
-        "3.作業後の管理点": "encoded/4_3.dat"
+        "1.作業前の管理点": "encoded/4_1.mp3",
+        "2.作業中の管理点": "encoded/4_2.mp3",
+        "3.作業後の管理点": "encoded/4_3.mp3"
     },
     "第5章 納期管理": {
-        "1.作業前の管理点": "encoded/5_1.dat",
-        "2.作業中の管理点": "encoded/5_2.dat",
-        "3.作業後の管理点": "encoded/5_3.dat"
+        "1.作業前の管理点": "encoded/5_1.mp3",
+        "2.作業中の管理点": "encoded/5_2.mp3",
+        "3.作業後の管理点": "encoded/5_3.mp3"
     },
     "第6章 コスト管理": {
-        "1.作業前の管理点": "encoded/6_1.dat",
-        "2.作業中の管理点": "encoded/6_2.dat",
-        "3.作業後の管理点": "encoded/6_3.dat"
+        "1.作業前の管理点": "encoded/6_1.mp3",
+        "2.作業中の管理点": "encoded/6_2.mp3",
+        "3.作業後の管理点": "encoded/6_3.mp3"
     },
     "第7章 より良い管理のために": {
-        "１．製造の位置づけ": "encoded/7_1.dat",
-        "２．食品ロスへの対応": "encoded/7_2.dat",
-        "３．マネジメントシステム": "encoded/7_3.dat",
-        "４．リスクアセスメント": "encoded/7_4.dat",
-        "５．３Ｍの管理": "encoded/7_5.dat",
-        "６．改善活動": "encoded/7_6.dat",
-        "７．コミュニケーション": "encoded/7_7.dat"
+        "１．製造の位置づけ": "encoded/7_1.mp3",
+        "２．食品ロスへの対応": "encoded/7_2.mp3",
+        "３．マネジメントシステム": "encoded/7_3.mp3",
+        "４．リスクアセスメント": "encoded/7_4.mp3",
+        "５．３Ｍの管理": "encoded/7_5.mp3",
+        "６．改善活動": "encoded/7_6.mp3",
+        "７．コミュニケーション": "encoded/7_7.mp3"
     }
 }
 
 # 课程页面
 def course_page():
     st.title("📚 课程内容")
-    
-    # 增加描述的字体大小
     st.markdown("<h3>请选择章节查看内容</h3>", unsafe_allow_html=True)
     st.write("")  # 空行
 
@@ -136,18 +121,8 @@ def course_page():
         for subchapter_title, file_path in subchapters.items():
             st.subheader(subchapter_title)
             
-            # 解码音频文件
-            decoded_audio = decode_audio(file_path)
-            
-            # 创建临时文件
-            temp_dir = tempfile.gettempdir()
-            file_name = os.path.basename(file_path).replace('.dat', '.mp3')
-            temp_audio_path = os.path.join(temp_dir, file_name)
-            with open(temp_audio_path, 'wb') as f:
-                f.write(decoded_audio)
-
-            # 播放音频
-            st.audio(temp_audio_path, format="audio/mp3")
+            # 直接播放音频文件
+            st.audio(file_path, format="audio/mp3")
 
             # 添加空行
             st.markdown("<hr>", unsafe_allow_html=True)
@@ -164,6 +139,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
