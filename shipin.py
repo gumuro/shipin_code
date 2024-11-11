@@ -46,16 +46,11 @@ def login_form():
     password = st.text_input("密码", type="password").strip()
     if st.button("登录"):
         if authenticate(username, password):
-            st.session_state.logged_in = True
-            st.session_state.run_once = True  # 标志变量，避免多次重新加载
-            st.write("🔄 数据正在加载，请稍候...")
-            st.experimental_rerun()
+            st.session_state.logged_in = True  # 设置登录状态
+            st.success("登录成功！")
         else:
             st.error("❌ 用户名或密码错误，请重试。")
-
-# 在 main 函数的开头检查 run_once
-if 'run_once' in st.session_state:
-    del st.session_state.run_once  # 清除标志位
+            
 
 # XOR 解密函数
 def xor_decode(data, key):
@@ -161,7 +156,8 @@ def course_page():
 def main():
     st.set_page_config(page_title="课程平台", layout="centered", initial_sidebar_state="collapsed")
 
-    if st.session_state.logged_in:
+    # 检查登录状态，如果已登录则显示课程内容，否则显示登录表单
+    if st.session_state.get("logged_in"):
         course_page()
     else:
         login_form()
