@@ -47,10 +47,15 @@ def login_form():
     if st.button("登录"):
         if authenticate(username, password):
             st.session_state.logged_in = True
+            st.session_state.run_once = True  # 标志变量，避免多次重新加载
             st.write("🔄 数据正在加载，请稍候...")
             st.experimental_rerun()
         else:
             st.error("❌ 用户名或密码错误，请重试。")
+
+# 在 main 函数的开头检查 run_once
+if 'run_once' in st.session_state:
+    del st.session_state.run_once  # 清除标志位
 
 # XOR 解密函数
 def xor_decode(data, key):
